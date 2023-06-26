@@ -1,7 +1,5 @@
 package com.ctn.springpractice.auth;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +18,11 @@ public class AuthenticationController {
 	
 	@Autowired
 	private AuthenticationService service;
-
+	@GetMapping("/test1")
+	public String testMethod(){
+		System.out.println("Test Demodgddf shdgjgfjfhjhkgjk rgrrdhdh");
+		return "I am ready";
+	}
 	@PostMapping("/register")
 	public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request){
 		log.info(request.getEmail());

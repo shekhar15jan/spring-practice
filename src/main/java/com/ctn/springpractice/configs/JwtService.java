@@ -16,8 +16,10 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class JwtService {
 
 	private static final String SECRET_KEY = "TL7EZi4VuC0hRNUNlQ4kwKJggl8hFTCvMVqfDtASXAY=";
@@ -42,7 +44,8 @@ public class JwtService {
 	
 	public boolean isTokenValid(String token, UserDetails userDetails) {
 		final String username = extractUserName(token);
-		return (username.equals(userDetails.getUsername()) && isTokenExpired(token));
+		//System.out.println(isTokenExpired(token));
+		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
 	}
 	
 	private boolean isTokenExpired(String token) {
