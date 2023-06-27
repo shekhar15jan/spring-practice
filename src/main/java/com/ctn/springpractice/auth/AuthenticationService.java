@@ -1,13 +1,14 @@
 package com.ctn.springpractice.auth;
 
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.ctn.springpractice.common.ApiResponse;
 import com.ctn.springpractice.configs.JwtService;
 import com.ctn.springpractice.user.Role;
 import com.ctn.springpractice.user.User;
@@ -29,9 +30,11 @@ public class AuthenticationService {
 	
 	@Autowired
 	private AuthenticationManager authenticationManager;
+	
+	@Autowired
+	private AuthenticationResponse authResponse;
 
-	public AuthenticationResponse register(RegisterRequest request) {
-		
+	public ApiResponse register(RegisterRequest request) {
 		
 		  var user = User.builder() .firstname(request.getFirstname())
 		  .lastname(request.getLastname()) .email(request.getEmail())
@@ -40,12 +43,20 @@ public class AuthenticationService {
 		 repository.save(user);
 		 
 		var jwtToken = jwtService.generateToken(user);
-		return AuthenticationResponse.builder()
-				.token(jwtToken)
-				.build();
+		authResponse = 
+				AuthenticationResponse
+				.builder()
+				.token(jwtToken).build();
+		return ApiResponse.builder()
+			.message("Token Geneareated")
+			.responseCode(HttpStatus.OK)
+			.responseBody(authResponse)
+		.build();
+		
+
 	}
 	
-	public AuthenticationResponse authenticate(AuthenticateRequest request) {
+	public ApiResponse authenticate(AuthenticateRequest request) {
 		authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(
 						request.getEmail(),
@@ -55,8 +66,14 @@ public class AuthenticationService {
 		var user = repository.findByEmail(request.getEmail())
 				.orElseThrow();
 		var jwtToken = jwtService.generateToken(user);
-		return AuthenticationResponse.builder()
-				.token(jwtToken)
+		authResponse = 
+				AuthenticationResponse
+				.builder()
+				.token(jwtToken).build();
+		return ApiResponse.builder()
+				.message("Token Geneareated")
+				.responseCode(HttpStatus.OK)
+				.responseBody(authResponse)
 				.build();
 	}
 }

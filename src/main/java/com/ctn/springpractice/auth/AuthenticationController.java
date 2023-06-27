@@ -2,11 +2,12 @@ package com.ctn.springpractice.auth;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.ctn.springpractice.common.ApiResponse;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -14,23 +15,18 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/api/v1/auth")
 @Slf4j
 public class AuthenticationController {
-	//Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
 	
 	@Autowired
 	private AuthenticationService service;
-	@GetMapping("/test1")
-	public String testMethod(){
-		System.out.println("Test Demodgddf shdgjgfjfhjhkgjk rgrrdhdh");
-		return "I am ready";
-	}
+	
 	@PostMapping("/register")
-	public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request){
+	public ResponseEntity<ApiResponse> register(@RequestBody RegisterRequest request){
 		log.info(request.getEmail());
 		return ResponseEntity.ok(service.register(request));
 	}
 	
 	@PostMapping("/authenticate")
-	public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticateRequest request){
+	public ResponseEntity<ApiResponse> authenticate(@RequestBody AuthenticateRequest request){
 		return ResponseEntity.ok(service.authenticate(request));
 	}
 }
